@@ -1,3 +1,7 @@
 name: rails-database-yml
 version: 1.0.0
 description: rails-database-yml step
+properties:
+  additinal_databases:
+    type: string
+    required: true
