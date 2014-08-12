@@ -1,10 +1,10 @@
 template_name=""
 
-if [ -z $WERCKER_RAILS_DATABASE_YML_POSTGRESQL_MIN_MESSAGE ]; then
-  export WERCKER_RAILS_DATABASE_YML_POSTGRESQL_MIN_MESSAGE="warning"
+if [ -z $WERCKER_RAILS_MULTIPLE_DATABASE_YML_POSTGRESQL_MIN_MESSAGE ]; then
+  export WERCKER_RAILS_MULTIPLE_DATABASE_YML_POSTGRESQL_MIN_MESSAGE="warning"
 fi
 
-if [ ! -n "$WERCKER_RAILS_DATABASE_YML_SERVICE" ]; then
+if [ ! -n "$WERCKER_RAILS_MULTIPLE_DATABASE_YML_SERVICE" ]; then
   debug 'service option not specified, looking for services in the environment'
 
   if [ -n "$WERCKER_MYSQL_HOST" ]; then
@@ -20,7 +20,7 @@ if [ ! -n "$WERCKER_RAILS_DATABASE_YML_SERVICE" ]; then
   fi
 else
   debug 'service option specified, will load specified template'
-  template_name="$WERCKER_RAILS_DATABASE_YML_SERVICE"
+  template_name="$WERCKER_RAILS_MULTIPLE_DATABASE_YML_SERVICE"
 fi
 
 info "using template $template_name"
@@ -37,7 +37,7 @@ else
 
   # cp -f "$template_filename" "$config_filename"
   sed \
-    -e "s;\$WERCKER_RAILS_DATABASE_YML_POSTGRESQL_MIN_MESSAGE;$WERCKER_RAILS_DATABASE_YML_POSTGRESQL_MIN_MESSAGE;g" \
+    -e "s;\$WERCKER_RAILS_MULTIPLE_DATABASE_YML_POSTGRESQL_MIN_MESSAGE;$WERCKER_RAILS_MULTIPLE_DATABASE_YML_POSTGRESQL_MIN_MESSAGE;g" \
     "$template_filename" > "$config_filename";
 
   info "created database.yml in config directory with content:"
