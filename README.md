@@ -8,6 +8,7 @@ For this step you need to have a mysql or postgres. See the [services](http://de
 
 - `service` This option is not required. If set, it will load the template from the specified service; otherwise, it will infer the service from the environment.
 - `postgresql-min-message` (optinal, default: `warning`): Set the min_messages parameter in the postgresql template.
+- `additional_databases`: Set the additinal database's prefix (ex. if you want to use `user_database.yml` and `recipe_database.yml`, specify `user,recipe`)
 
 ## EAMPLE
 
