@@ -1,19 +1,15 @@
 # Rails database yml
 
-Generates a `config/database.yml` file with the environment information from your database service.
+Generates multiple `config/database.yml` file with the environment information from your database service.
 
 For this step you need to have a mysql or postgres. See the [services](http://devcenter.wercker.com/articles/services/) on wercker devcenter for more information about services.
 
-# What's new
-
-- Add `postgresql-min-message` parameter
-
-# Options
+## OPTIONS
 
 - `service` This option is not required. If set, it will load the template from the specified service; otherwise, it will infer the service from the environment.
 - `postgresql-min-message` (optinal, default: `warning`): Set the min_messages parameter in the postgresql template.
 
-# Example
+## EAMPLE
 
 The following `wercker.yml`:
 
@@ -23,7 +19,8 @@ services:
   - wercker/postgresql
 build:
   steps:
-    - rails-database-yml
+    - wantedly/rails-multiple-database-yml:
+      additional_databases: user,recipe
 ```
 
 Will generate the following `config/database.yml`:
@@ -40,20 +37,30 @@ test:
     min_messages: warning
 ```
 
-# Changelog
+`config/user_database.yml`:
 
-## 1.0.0
+``` yaml
+test:
+    adapter: postgresql
+    encoding: "utf8"
+    database: user_<%= ENV['WERCKER_POSTGRESQL_DATABASE'] %><%= ENV['TEST_ENV_NUMBER'] %>
+    username: <%= ENV['WERCKER_POSTGRESQL_USERNAME'] %>
+    password: <%= ENV['WERCKER_POSTGRESQL_PASSWORD'] %>
+    host: <%= ENV['WERCKER_POSTGRESQL_HOST'] %>
+    port: <%= ENV['WERCKER_POSTGRESQL_PORT'] %>
+    min_messages: warning
+```
 
-- Add `postgresql-min-message` parameter
+`config/recipe_database.yml`:
 
-## 0.9.3
-
-- Use `$PWD` instead of `$WERCKER_ROOT_DIR`
-
-## 0.9.2
-
-- Adds environment variable `TEST_ENV_NUMBER` to the database name
-
-## 0.9.1
-
-- Initial version
+``` yaml
+test:
+    adapter: postgresql
+    encoding: "utf8"
+    database: recipe_<%= ENV['WERCKER_POSTGRESQL_DATABASE'] %><%= ENV['TEST_ENV_NUMBER'] %>
+    username: <%= ENV['WERCKER_POSTGRESQL_USERNAME'] %>
+    password: <%= ENV['WERCKER_POSTGRESQL_PASSWORD'] %>
+    host: <%= ENV['WERCKER_POSTGRESQL_HOST'] %>
+    port: <%= ENV['WERCKER_POSTGRESQL_PORT'] %>
+    min_messages: warning
+```
