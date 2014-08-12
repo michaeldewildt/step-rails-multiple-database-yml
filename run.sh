@@ -26,20 +26,33 @@ fi
 info "using template $template_name"
 template_filename="$WERCKER_STEP_ROOT/templates/$template_name.yml"
 
+databases=",${WERCKER_RAILS_MULTIPLE_DATABASE_YML_ADDITIONAL_DATABASES}"
+IFS=,
+ary=($databases)
+
 if [ ! -f "$template_filename" ]; then
   fail "no template found with name $template_name"
 else
-  config_filename="$PWD/config/database.yml"
+  for key in "${!ary[@]}"; do
+    prefix=""
+    if [ "${ary[$key]}" != "" ]; then
+      echo "${ary[$key]}"
+      prefix="${ary[$key]}_"
+    fi
 
-  if [ -f "$config_filename" ]; then
-    warn 'config/database.yml already exists and will be overwritten'
-  fi
+    config_filename="$PWD/config/${prefix}database.yml"
 
-  # cp -f "$template_filename" "$config_filename"
-  sed \
-    -e "s;\$WERCKER_RAILS_MULTIPLE_DATABASE_YML_POSTGRESQL_MIN_MESSAGE;$WERCKER_RAILS_MULTIPLE_DATABASE_YML_POSTGRESQL_MIN_MESSAGE;g" \
-    "$template_filename" > "$config_filename";
+    if [ -f "$config_filename" ]; then
+      warn "config/${prefix}database.yml already exists and will be overwritten"
+    fi
 
-  info "created database.yml in config directory with content:"
-  info "$(cat "$config_filename")"
+    # cp -f "$template_filename" "$config_filename"
+    sed \
+      -e "s;\$WERCKER_RAILS_MULTIPLE_DATABASE_YML_POSTGRESQL_MIN_MESSAGE;$WERCKER_RAILS_MULTIPLE_DATABASE_YML_POSTGRESQL_MIN_MESSAGE;g" \
+      -e "s;\$PREFIX;$prefix;g" \
+      "$template_filename" > "$config_filename";
+
+    info "created ${prefix}database.yml in config directory with content:"
+    info "$(cat "$config_filename")"
+  done
 fi
