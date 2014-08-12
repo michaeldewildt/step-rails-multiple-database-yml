@@ -6,6 +6,6 @@ keyword:
   - multiple
   - rails
 properties:
-  additinal_databases:
+  additional_databases:
     type: string
     required: true
