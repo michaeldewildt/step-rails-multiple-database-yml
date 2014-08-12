@@ -1,0 +1,4 @@
+box: wercker/rvm
+build:
+  steps:
+    - validate-wercker-step
