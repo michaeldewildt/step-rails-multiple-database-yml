@@ -1,6 +1,10 @@
-name: rails-database-yml
+name: rails-multiple-database-yml
 version: 1.0.0
-description: rails-database-yml step
+description: rails-multiple-database-yml step
+keyword:
+  - database
+  - multiple
+  - rails
 properties:
   additinal_databases:
     type: string
